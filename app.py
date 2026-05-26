@@ -34,33 +34,7 @@ def ensure_model():
 
 ensure_model()
 
-# ── Auto-train model if model.pkl doesn't exist ────────────────────────────────
-def ensure_model():
-    model_path = BASE_DIR / "model.pkl"
-    if model_path.exists():
-        return
-    df = pd.read_csv(BASE_DIR / "customer_churn_prediction_dataset.csv")
-    df = df.drop(columns=["customerID"], errors="ignore")
-    df["Churn"] = (df["Churn"] == "Yes").astype(int)
-    cat_cols = [c for c in df.columns if c != "Churn"
-                and df[c].dtype not in [np.float64, np.int64, np.int32, np.float32]]
-    df_enc = pd.get_dummies(df, columns=cat_cols, dtype=int)
-    X = df_enc.drop(columns=["Churn"]).astype(float)
-    y = df_enc["Churn"]
-    scaler = StandardScaler()
-    X_s = scaler.fit_transform(X)
-    clf = LogisticRegression(max_iter=5000, C=1.0, random_state=42)
-    clf.fit(X_s, y)
-    bundle = {"scaler": scaler, "clf": clf, "feature_names": X.columns.to_numpy()}
-    joblib.dump(bundle, model_path)
-
-ensure_model()   # ← runs before anything else
-
 # ── Page Config ────────────────────────────────────────────
-st.set_page_config(...)   # rest of your app continues here  # rest of your app continues here
-
-BASE_DIR = Path(__file__).parent
-
 st.set_page_config(
     page_title="ChurnScope · AI Predictor",
     page_icon="🔮",
