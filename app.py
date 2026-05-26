@@ -57,7 +57,7 @@ def ensure_model():
 ensure_model()   # ← runs before anything else
 
 # ── Page Config ────────────────────────────────────────────
-st.set_page_config(...)   # rest of your app continues here
+st.set_page_config(...)   # rest of your app continues here  # rest of your app continues here
 
 BASE_DIR = Path(__file__).parent
 
